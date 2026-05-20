@@ -90,7 +90,7 @@ export const PAYLOAD_OPTIONS = [
     repos: ["balancer/multisig-ops"],
     branchNamePlaceholder: "feature/add-reward-to-gauge",
     prNamePlaceholder: "Add Reward to Gauge XYZ",
-    prTypePath: "MaxiOps/add_rewards/[chain]/",
+    prTypePath: "OmniOps/OpsUI/add_rewards/[chain]/",
   },
   {
     href: "/payload-builder/set-reward-distributor-to-gauge",
@@ -103,7 +103,7 @@ export const PAYLOAD_OPTIONS = [
     repos: ["balancer/multisig-ops"],
     branchNamePlaceholder: "feature/set-reward-distributor-to-gauge",
     prNamePlaceholder: "Set Reward Distributor to Gauge XYZ",
-    prTypePath: "MaxiOps/set_rewards/[chain]/",
+    prTypePath: "OmniOps/OpsUI/set_rewards/[chain]/",
   },
   {
     href: "/payload-builder/cctp-bridge",
@@ -115,7 +115,7 @@ export const PAYLOAD_OPTIONS = [
     repos: ["balancer/multisig-ops"],
     branchNamePlaceholder: "feature/cctp-bridge-setup",
     prNamePlaceholder: "Set Up CCTP Bridge for Network XYZ",
-    prTypePath: "MaxiOps/CCTP_Bridge/",
+    prTypePath: "OmniOps/OpsUI/CCTP_Bridge/",
   },
   {
     href: "/payload-builder/fee-setter",
@@ -128,7 +128,7 @@ export const PAYLOAD_OPTIONS = [
     repos: ["balancer/multisig-ops"],
     branchNamePlaceholder: "feature/set-swapfee",
     prNamePlaceholder: "Set Swap Fee on Pool XYZ",
-    prTypePath: "MaxiOps/PoolParameterChanges/PoolSwapFeeChanges/",
+    prTypePath: "OmniOps/OpsUI/PoolSwapFeeChanges/",
   },
   {
     href: "/payload-builder/fee-setter-v3",
@@ -141,7 +141,7 @@ export const PAYLOAD_OPTIONS = [
     repos: ["balancer/multisig-ops"],
     branchNamePlaceholder: "feature/set-swapfee-v3",
     prNamePlaceholder: "Set Swap Fee on Pool XYZ",
-    prTypePath: "MaxiOps/PoolParameterChanges/PoolSwapFeeChanges/",
+    prTypePath: "OmniOps/OpsUI/PoolSwapFeeChanges/",
   },
   {
     href: "/payload-builder/protocol-fee-setter-v3",
@@ -154,7 +154,7 @@ export const PAYLOAD_OPTIONS = [
     repos: ["balancer/multisig-ops"],
     branchNamePlaceholder: "feature/set-protocol-fee-v3",
     prNamePlaceholder: "Set Protocol Fee on Pool XYZ",
-    prTypePath: "MaxiOps/PoolParameterChanges/ProtocolFeeChanges/",
+    prTypePath: "OmniOps/OpsUI/ProtocolFeeChanges/",
   },
   {
     href: "/payload-builder/injector-configurator",
@@ -166,7 +166,7 @@ export const PAYLOAD_OPTIONS = [
     repos: ["balancer/multisig-ops"],
     branchNamePlaceholder: "feature/set-injector",
     prNamePlaceholder: "Program rewards injector XYZ",
-    prTypePath: "MaxiOps/injectorScheduling/[chain]/",
+    prTypePath: "OmniOps/OpsUI/injectorScheduling/[chain]/",
   },
   {
     href: "/payload-builder/initialize-buffer",
@@ -216,7 +216,7 @@ export const PAYLOAD_OPTIONS = [
     repos: ["balancer/multisig-ops"],
     branchNamePlaceholder: "feature/stablesurge-config",
     prNamePlaceholder: "Configure StableSurge on Pool XYZ",
-    prTypePath: "MaxiOps/PoolParameterChanges/PoolStableSurgeParams/",
+    prTypePath: "OmniOps/OpsUI/PoolStableSurgeParams/",
   },
   {
     href: "/hooks/mev-capture",
@@ -229,7 +229,7 @@ export const PAYLOAD_OPTIONS = [
     repos: ["balancer/multisig-ops"],
     branchNamePlaceholder: "feature/mevcapture-config",
     prNamePlaceholder: "Configure MEV Capture on Pool XYZ",
-    prTypePath: "MaxiOps/PoolParameterChanges/PoolMevHookParams/",
+    prTypePath: "OmniOps/OpsUI/PoolMevHookParams/",
   },
   {
     href: "/payload-builder/amp-factor-update-v2",
@@ -242,7 +242,7 @@ export const PAYLOAD_OPTIONS = [
     repos: ["balancer/multisig-ops"],
     branchNamePlaceholder: "feature/amp-factor-update",
     prNamePlaceholder: "Configure Amp Update on Pool XYZ",
-    prTypePath: "MaxiOps/PoolParameterChanges/PoolAmpChanges/",
+    prTypePath: "OmniOps/OpsUI/PoolAmpChanges/",
   },
   {
     href: "/payload-builder/amp-factor-update-v3",
@@ -255,7 +255,7 @@ export const PAYLOAD_OPTIONS = [
     repos: ["balancer/multisig-ops"],
     branchNamePlaceholder: "feature/amp-factor-update",
     prNamePlaceholder: "Configure Amp Update on Pool XYZ",
-    prTypePath: "MaxiOps/PoolParameterChanges/PoolAmpChanges/",
+    prTypePath: "OmniOps/OpsUI/PoolAmpChanges/",
   },
   {
     href: "/payload-builder/emergency",
@@ -267,7 +267,7 @@ export const PAYLOAD_OPTIONS = [
     repos: ["balancer/multisig-ops"],
     branchNamePlaceholder: "feature/emergency-payload",
     prNamePlaceholder: "Create emergency payload for pool XYZ",
-    prTypePath: "MaxiOps/Emergency-Multisigs/",
+    prTypePath: "OmniOps/OpsUI/Emergency-Multisigs/",
   },
   {
     href: "/payload-builder/composer",
@@ -279,7 +279,7 @@ export const PAYLOAD_OPTIONS = [
     repos: ["balancer/multisig-ops"],
     branchNamePlaceholder: "feature/combined-operations",
     prNamePlaceholder: "Combined Operations",
-    prTypePath: "MaxiOps/CompositePayloads/",
+    prTypePath: "OmniOps/OpsUI/CompositePayloads/",
   },
   {
     href: "/payload-builder/reclamm",
@@ -291,7 +291,7 @@ export const PAYLOAD_OPTIONS = [
     repos: ["balancer/multisig-ops"],
     branchNamePlaceholder: "feature/reclamm-config",
     prNamePlaceholder: "Configure ReCLAMM parameters for pool XYZ",
-    prTypePath: "MaxiOps/PoolParameterChanges/ReClammParams/",
+    prTypePath: "OmniOps/OpsUI/ReClammParams/",
   },
   {
     href: "/payload-builder/spark-psm",
@@ -303,7 +303,7 @@ export const PAYLOAD_OPTIONS = [
     repos: ["balancer/multisig-ops"],
     branchNamePlaceholder: "feature/spark-psm",
     prNamePlaceholder: "Spark PSM USDC/sUSDS Swap",
-    prTypePath: "MaxiOps/SparkPSM/",
+    prTypePath: "OmniOps/OpsUI/SparkPSM/",
   },
 ];
 
