@@ -373,8 +373,9 @@ export default function ChangeProtocolFeeV3Module({ addressBook }: { addressBook
     const networkOption = NETWORK_OPTIONS.find(n => n.apiID === selectedNetwork);
     const networkName = networkOption?.label || selectedNetwork;
     const networkPath = networkName === "Ethereum" ? "Mainnet" : networkName;
+    const chainId = networkOption?.chainId || selectedNetwork;
 
-    const filename = networkPath + `/set-protocol-fee-${selectedPool.address}-${uniqueId}.json`;
+    const filename = `set-protocol-fee-${chainId}-${selectedPool.address}-${uniqueId}.json`;
 
     return {
       prefillBranchName: `feature/protocol-fee-${shortPoolId}-${uniqueId}`,

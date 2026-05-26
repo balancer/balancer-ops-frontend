@@ -221,7 +221,8 @@ function RewardsInjectorConfigurator({
         : "";
 
     // Create the filename without any path prefix - the path will come from config
-    const filename = `injector-config-${shortInjectorId}-${uniqueId}.json`;
+    const chainId = getChainId(networkName);
+    const filename = `injector-config-${chainId}-${shortInjectorId}-${uniqueId}.json`;
 
     return {
       prefillBranchName: `feature/injector-config-${shortInjectorId}-${uniqueId}`,

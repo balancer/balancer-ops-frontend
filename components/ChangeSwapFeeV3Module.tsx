@@ -313,9 +313,10 @@ export default function ChangeSwapFeeV3Module({ addressBook }: { addressBook: Ad
     const networkOption = NETWORK_OPTIONS.find(n => n.apiID === selectedNetwork);
     const networkName = networkOption?.label || selectedNetwork;
     const networkPath = networkName === "Ethereum" ? "Mainnet" : networkName;
+    const chainId = networkOption?.chainId || selectedNetwork;
 
-    // Create the filename with network path included
-    const filename = networkPath + `/set-swap-fee-${selectedPool.address}-${uniqueId}.json`;
+    // Create the filename with chain ID included
+    const filename = `set-swap-fee-${chainId}-${selectedPool.address}-${uniqueId}.json`;
 
     return {
       prefillBranchName: `feature/swap-fee-${shortPoolId}-${uniqueId}`,

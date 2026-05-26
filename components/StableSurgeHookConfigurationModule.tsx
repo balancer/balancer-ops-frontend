@@ -170,9 +170,10 @@ export default function StableSurgeHookConfigurationModule({
     const networkOption = NETWORK_OPTIONS.find(n => n.apiID === selectedNetwork);
     const networkName = networkOption?.label || selectedNetwork;
     const networkPath = networkName === "Ethereum" ? "Mainnet" : networkName;
+    const chainId = networkOption?.chainId || selectedNetwork;
 
-    // Create the filename with network included
-    const filename = networkPath + `/stable-surge-params-${selectedPool.address}-${uniqueId}.json`;
+    // Create the filename with chain ID included
+    const filename = `stable-surge-params-${chainId}-${selectedPool.address}-${uniqueId}.json`;
 
     // Add the network to the OpenPRButton
     // This ensures the network is passed to the PR modal

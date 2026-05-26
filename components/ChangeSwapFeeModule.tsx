@@ -109,9 +109,10 @@ export default function ChangeSwapFeeModule({ addressBook }: ChangeSwapFeeProps)
     const networkOption = NETWORK_OPTIONS.find(n => n.apiID === selectedNetwork);
     const networkName = networkOption?.label || selectedNetwork;
     const networkPath = networkName === "Ethereum" ? "Mainnet" : networkName;
+    const chainId = networkOption?.chainId || selectedNetwork;
 
     // Create just the filename - the path will come from the config
-    const filename = networkPath + `/set-swap-fee-${selectedPool.address}-${uniqueId}.json`;
+    const filename = `set-swap-fee-${chainId}-${selectedPool.address}-${uniqueId}.json`;
 
     return {
       prefillBranchName: `feature/swap-fee-${shortPoolId}-${uniqueId}`,

@@ -88,6 +88,7 @@ export default function ComposerPayloadViewer({
     const networkOption = NETWORK_OPTIONS.find(n => n.apiID === primaryNetwork);
     const networkName = networkOption?.label;
     const networkPath = networkName === "Ethereum" ? "Mainnet" : networkName;
+    const chainId = networkOption?.chainId || primaryNetwork;
 
     // Create descriptive title based on operations, grouping duplicates
     const operationCounts = new Map<string, number>();
@@ -116,7 +117,7 @@ export default function ComposerPayloadViewer({
       prefillBranchName: `feature/combined-operations-${uniqueId}`,
       prefillPrName: `Combined Payload: ${combinedTitle}`,
       prefillDescription: `This PR combines ${operations.length} operations into a single transaction on ${networkName}:\n\n${operationsList}`,
-      prefillFilename: `${networkPath}/combined-operations-${uniqueId}.json`,
+      prefillFilename: `combined-operations-${chainId}-${uniqueId}.json`,
     };
   };
 
