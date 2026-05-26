@@ -62,6 +62,7 @@ import { useSearchParams } from "next/navigation";
 import { useDebounce } from "use-debounce";
 import { useValidateStableSurge } from "@/lib/hooks/validation/useValidateStableSurge";
 import { getMultisigForNetwork } from "@/lib/utils/getMultisigForNetwork";
+import { updateQueryParams } from "@/lib/utils/updateQueryParams";
 import { generateUniqueId } from "@/lib/utils/generateUniqueID";
 import ComposerButton from "@/app/payload-builder/composer/ComposerButton";
 import ComposerIndicator from "@/app/payload-builder/composer/ComposerIndicator";
@@ -233,6 +234,7 @@ export default function StableSurgeHookConfigurationModule({
     setNewMaxSurgeFeePercentage("");
     setNewSurgeThresholdPercentage("");
     setIsCurrentWalletManager(false);
+    updateQueryParams({ network: newNetwork.toLowerCase(), pool: null });
 
     // Find the corresponding chain ID for the selected network
     const networkOption = networkOptionsWithV3.find(n => n.apiID === newNetwork);
@@ -253,6 +255,7 @@ export default function StableSurgeHookConfigurationModule({
   // Check manager status when pool is selected
   const handlePoolSelect = (pool: Pool) => {
     setSelectedPool(pool);
+    updateQueryParams({ pool: pool.address.toLowerCase() });
   };
 
   const clearPoolSelection = () => {
@@ -260,6 +263,7 @@ export default function StableSurgeHookConfigurationModule({
     setGeneratedPayload(null);
     setNewMaxSurgeFeePercentage("");
     setNewSurgeThresholdPercentage("");
+    updateQueryParams({ pool: null });
   };
 
   const handleOpenPRModal = () => {
