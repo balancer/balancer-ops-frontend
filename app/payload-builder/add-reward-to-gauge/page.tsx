@@ -241,7 +241,9 @@ export default function AddRewardToGaugePage() {
     }
 
     // Just provide the filename portion - let the modal combine it with the path from config
-    const filename = `add-rewards-${shortGaugeId}-${uniqueId}.json`;
+    const chainIds = Array.from(new Set(rewardAdds.map(r => r.chainId)));
+    const chainSlug = chainIds.length === 1 ? chainIds[0] : "multi";
+    const filename = `add-rewards-${chainSlug}-${shortGaugeId}-${uniqueId}.json`;
 
     return {
       prefillBranchName: `feature/add-rewards-${shortGaugeId}-${uniqueId}`,

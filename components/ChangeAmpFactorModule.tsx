@@ -311,8 +311,9 @@ export default function ChangeAmpFactorModule({
     const networkOption = NETWORK_OPTIONS.find(n => n.apiID === selectedNetwork);
     const networkName = networkOption?.label || selectedNetwork;
     const networkPath = networkName === "Ethereum" ? "Mainnet" : networkName;
+    const chainId = networkOption?.chainId || selectedNetwork;
 
-    const filename = networkPath + `/amp-factor-update-${selectedPool.address}-${uniqueId}.json`;
+    const filename = `amp-factor-update-${chainId}-${selectedPool.address}-${uniqueId}.json`;
 
     return {
       prefillBranchName: `feature/amp-factor-${shortPoolId}-${uniqueId}`,

@@ -561,6 +561,7 @@ export default function EmergencyPayloadBuilder({ addressBook }: EmergencyPayloa
     const networkOption = NETWORK_OPTIONS.find(n => n.apiID === selectedNetwork);
     const networkName = networkOption?.label || selectedNetwork;
     const networkPath = networkName === "Ethereum" ? "Mainnet" : networkName;
+    const chainId = networkOption?.chainId || selectedNetwork;
 
     // Generate description
     const descriptions = [];
@@ -587,8 +588,7 @@ export default function EmergencyPayloadBuilder({ addressBook }: EmergencyPayloa
         : selectedPools.length > 0
           ? "pools"
           : "vault";
-    const filename =
-      networkPath + `/emergency-actions-${protocolVersion}-${actionType}-${uniqueId}.json`;
+    const filename = `emergency-actions-${chainId}-${protocolVersion}-${actionType}-${uniqueId}.json`;
 
     return {
       prefillBranchName: `emergency/${protocolVersion}-${actionType}-${uniqueId}`,

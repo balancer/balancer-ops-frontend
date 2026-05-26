@@ -267,7 +267,7 @@ export const PAYLOAD_OPTIONS = [
     repos: ["balancer/multisig-ops"],
     branchNamePlaceholder: "feature/emergency-payload",
     prNamePlaceholder: "Create emergency payload for pool XYZ",
-    prTypePath: "OmniAutoOps/",
+    prTypePath: "MaxiOps/Emergency-Multisigs/",
   },
   {
     href: "/payload-builder/composer",

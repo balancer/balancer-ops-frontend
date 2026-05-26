@@ -646,6 +646,7 @@ export default function ReClammModule({ addressBook }: { addressBook: AddressBoo
     const networkOption = NETWORK_OPTIONS.find(n => n.apiID === selectedNetwork);
     const networkName = networkOption?.label || selectedNetwork;
     const networkPath = networkName === "Ethereum" ? "Mainnet" : networkName;
+    const chainId = networkOption?.chainId || selectedNetwork;
 
     // Determine what parameters are being changed
     const hasCenterednessMargin = debouncedCenterednessMargin && isCenterednessMarginValid;
@@ -658,7 +659,7 @@ export default function ReClammModule({ addressBook }: { addressBook: AddressBoo
     let description: string;
 
     // Use same filename, branch name, and PR name for all cases
-    filename = networkPath + `/set-reclamm-parameters-${selectedPool.address}-${uniqueId}.json`;
+    filename = `set-reclamm-parameters-${chainId}-${selectedPool.address}-${uniqueId}.json`;
     branchName = `feature/reclamm-parameters-${shortPoolId}-${uniqueId}`;
     prName = `Set ReClaMM Parameters for ${poolName} on ${networkName}`;
 

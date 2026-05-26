@@ -225,9 +225,10 @@ export default function MevCaptureHookConfigurationModule({
     const networkOption = NETWORK_OPTIONS.find(n => n.apiID === selectedNetwork);
     const networkName = networkOption?.label || selectedNetwork;
     const networkPath = networkName === "Ethereum" ? "Mainnet" : networkName;
+    const chainId = networkOption?.chainId || selectedNetwork;
 
-    // Create the filename with network included
-    const filename = networkPath + `/mev-capture-params-${shortPoolId}-${uniqueId}.json`;
+    // Create the filename with chain ID included
+    const filename = `mev-capture-params-${chainId}-${shortPoolId}-${uniqueId}.json`;
 
     return {
       prefillBranchName: `feature/mev-capture-params-${shortPoolId}-${uniqueId}`,
