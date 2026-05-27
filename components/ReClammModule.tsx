@@ -57,6 +57,7 @@ import { useDebounce } from "use-debounce";
 import ComposerButton from "@/app/payload-builder/composer/ComposerButton";
 import ComposerIndicator from "@/app/payload-builder/composer/ComposerIndicator";
 import { getMultisigForNetwork } from "@/lib/utils/getMultisigForNetwork";
+import { updateQueryParams } from "@/lib/utils/updateQueryParams";
 import { isZeroAddress } from "@ethereumjs/util";
 import { useValidateReclamm } from "@/lib/hooks/validation/useValidateReclamm";
 import { useSearchParams } from "next/navigation";
@@ -250,6 +251,7 @@ export default function ReClammModule({ addressBook }: { addressBook: AddressBoo
     setPriceRatioUpdateEndTime("");
     setStopPriceRatioUpdate(false);
     setIsCurrentWalletManager(false);
+    updateQueryParams({ network: newNetwork.toLowerCase(), pool: null });
 
     // Find the corresponding chain ID for the selected network
     const networkOption = networkOptionsWithV3.find(n => n.apiID === newNetwork);
@@ -269,6 +271,7 @@ export default function ReClammModule({ addressBook }: { addressBook: AddressBoo
 
   const handlePoolSelection = (pool: Pool) => {
     setSelectedPool(pool);
+    updateQueryParams({ pool: pool.address.toLowerCase() });
   };
 
   // Effect to handle URL parameters and auto-select pool
@@ -312,6 +315,7 @@ export default function ReClammModule({ addressBook }: { addressBook: AddressBoo
     setPriceRatioUpdateEndTime("");
     setStopPriceRatioUpdate(false);
     setIsCurrentWalletManager(false);
+    updateQueryParams({ pool: null });
   };
 
   const handleOpenPRModal = () => {

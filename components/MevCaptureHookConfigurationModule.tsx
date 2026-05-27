@@ -57,6 +57,7 @@ import { useSearchParams } from "next/navigation";
 import { useValidateMevCapture } from "@/lib/hooks/validation/useValidateMevCapture";
 import { useDebounce } from "use-debounce";
 import { getMultisigForNetwork } from "@/lib/utils/getMultisigForNetwork";
+import { updateQueryParams } from "@/lib/utils/updateQueryParams";
 import { generateUniqueId } from "@/lib/utils/generateUniqueID";
 import ComposerButton from "@/app/payload-builder/composer/ComposerButton";
 import ComposerIndicator from "@/app/payload-builder/composer/ComposerIndicator";
@@ -171,6 +172,7 @@ export default function MevCaptureHookConfigurationModule({
     setNewMevTaxThreshold("");
     setNewMevTaxMultiplier("");
     setIsCurrentWalletManager(false);
+    updateQueryParams({ network: newNetwork.toLowerCase(), pool: null });
 
     // Find the corresponding chain ID for the selected network
     const networkOption = networkOptions.find(n => n.apiID === newNetwork);
@@ -240,6 +242,7 @@ export default function MevCaptureHookConfigurationModule({
 
   const handlePoolSelect = (pool: Pool) => {
     setSelectedPool(pool);
+    updateQueryParams({ pool: pool.address.toLowerCase() });
   };
 
   const clearPoolSelection = () => {
@@ -247,6 +250,7 @@ export default function MevCaptureHookConfigurationModule({
     setGeneratedPayload(null);
     setNewMevTaxThreshold("");
     setNewMevTaxMultiplier("");
+    updateQueryParams({ pool: null });
   };
 
   const handleOpenPRModal = () => {
