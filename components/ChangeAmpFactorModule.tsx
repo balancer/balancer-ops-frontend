@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useQuery } from "@apollo/client/react";
+import { useSearchParams } from "next/navigation";
 import {
   Alert,
   AlertDescription,
@@ -49,6 +50,7 @@ import { TrendingUp } from "react-feather";
 import { NetworkSelector } from "@/components/NetworkSelector";
 import { generateUniqueId } from "@/lib/utils/generateUniqueID";
 import { getMultisigForNetwork } from "@/lib/utils/getMultisigForNetwork";
+import { updateQueryParams } from "@/lib/utils/updateQueryParams";
 import PoolSelector from "./PoolSelector";
 import { ParameterChangePreviewCard } from "./ParameterChangePreviewCard";
 import { useDebounce } from "use-debounce";
@@ -100,6 +102,10 @@ export default function ChangeAmpFactorModule({
 
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const searchParams = useSearchParams();
+  const initialNetworkSetRef = useRef(false);
+  const initialPoolSetRef = useRef(false);
 
   // Get protocol-specific configuration
   const config = PROTOCOL_CONFIG[protocolVersion];
@@ -170,6 +176,35 @@ export default function ChangeAmpFactorModule({
 
   const resolveMultisig = (network: string) => getMultisigForNetwork(addressBook, network, config.multisigType);
 
+  // Pre-select network from `?network=` query param on first load
+  useEffect(() => {
+    if (initialNetworkSetRef.current) return;
+    const networkParam = searchParams.get("network");
+    if (!networkParam) return;
+
+    const networkOption = filteredNetworkOptions.find(
+      n => n.apiID.toLowerCase() === networkParam.toLowerCase(),
+    );
+    if (networkOption) {
+      setSelectedNetwork(networkOption.apiID);
+      setSelectedMultisig(resolveMultisig(networkOption.apiID));
+      initialNetworkSetRef.current = true;
+    }
+  }, [searchParams, filteredNetworkOptions, resolveMultisig]);
+
+  // Pre-select pool from `?pool=` query param once pool data is loaded
+  useEffect(() => {
+    if (initialPoolSetRef.current) return;
+    const poolParam = searchParams.get("pool");
+    if (!poolParam || filteredPools.length === 0 || !selectedNetwork) return;
+
+    const pool = filteredPools.find(p => p.address.toLowerCase() === poolParam.toLowerCase());
+    if (pool) {
+      setSelectedPool(pool as unknown as Pool);
+      initialPoolSetRef.current = true;
+    }
+  }, [searchParams, filteredPools, selectedNetwork]);
+
   const handleNetworkChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newNetwork = e.target.value;
     setSelectedNetwork(newNetwork);
@@ -178,6 +213,7 @@ export default function ChangeAmpFactorModule({
     setGeneratedPayload(null);
     setNewAmpFactor("");
     setEndDateTime("");
+    updateQueryParams({ network: newNetwork.toLowerCase(), pool: null });
   };
 
   const handlePoolSelect = (pool: Pool) => {
@@ -185,6 +221,7 @@ export default function ChangeAmpFactorModule({
     setGeneratedPayload(null);
     setNewAmpFactor("");
     setEndDateTime("");
+    updateQueryParams({ pool: pool.address.toLowerCase() });
   };
 
   const clearPoolSelection = () => {
@@ -192,6 +229,7 @@ export default function ChangeAmpFactorModule({
     setGeneratedPayload(null);
     setNewAmpFactor("");
     setEndDateTime("");
+    updateQueryParams({ pool: null });
   };
 
   const handleOpenPRModal = () => {

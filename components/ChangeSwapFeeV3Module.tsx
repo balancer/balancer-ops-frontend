@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useQuery } from "@apollo/client/react";
+import { useSearchParams } from "next/navigation";
 import {
   Alert,
   AlertDescription,
@@ -61,6 +62,7 @@ import {
 } from "@/lib/hooks/validation/useValidateSwapFee";
 import { useDebounce } from "use-debounce";
 import { getMultisigForNetwork } from "@/lib/utils/getMultisigForNetwork";
+import { updateQueryParams } from "@/lib/utils/updateQueryParams";
 import ComposerButton from "@/app/payload-builder/composer/ComposerButton";
 import ComposerIndicator from "@/app/payload-builder/composer/ComposerIndicator";
 import { fetchAddressType } from "@/lib/services/fetchAddressType";
@@ -77,6 +79,10 @@ export default function ChangeSwapFeeV3Module({ addressBook }: { addressBook: Ad
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [debouncedSwapFee] = useDebounce(newSwapFee, 300);
+
+  const searchParams = useSearchParams();
+  const initialNetworkSetRef = useRef(false);
+  const initialPoolSetRef = useRef(false);
 
   //Chain state switch
   const { switchChain } = useSwitchChain();
@@ -114,6 +120,37 @@ export default function ChangeSwapFeeV3Module({ addressBook }: { addressBook: Ad
     );
   })();
 
+  // Pre-select network from `?network=` query param on first load
+  useEffect(() => {
+    if (initialNetworkSetRef.current) return;
+    const networkParam = searchParams.get("network");
+    if (!networkParam) return;
+
+    const networkOption = networkOptionsWithV3.find(
+      n => n.apiID.toLowerCase() === networkParam.toLowerCase(),
+    );
+    if (networkOption) {
+      setSelectedNetwork(networkOption.apiID);
+      setSelectedMultisig(resolveMultisig(networkOption.apiID));
+      initialNetworkSetRef.current = true;
+    }
+  }, [searchParams, networkOptionsWithV3, resolveMultisig]);
+
+  // Pre-select pool from `?pool=` query param once pool data is loaded
+  useEffect(() => {
+    if (initialPoolSetRef.current) return;
+    const poolParam = searchParams.get("pool");
+    if (!poolParam || !data?.poolGetPools || !selectedNetwork) return;
+
+    const pool = data.poolGetPools.find(
+      p => p.address.toLowerCase() === poolParam.toLowerCase(),
+    );
+    if (pool) {
+      setSelectedPool(pool as unknown as Pool);
+      initialPoolSetRef.current = true;
+    }
+  }, [searchParams, data?.poolGetPools, selectedNetwork]);
+
   const handleNetworkChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newNetwork = e.target.value;
     setSelectedNetwork(newNetwork);
@@ -122,6 +159,7 @@ export default function ChangeSwapFeeV3Module({ addressBook }: { addressBook: Ad
     setGeneratedPayload(null);
     setNewSwapFee("");
     setIsCurrentWalletManager(false);
+    updateQueryParams({ network: newNetwork.toLowerCase(), pool: null });
 
     // Find the corresponding chain ID for the selected network
     const networkOption = networkOptionsWithV3.find(n => n.apiID === newNetwork);
@@ -142,6 +180,7 @@ export default function ChangeSwapFeeV3Module({ addressBook }: { addressBook: Ad
   // Check manager status when pool is selected
   const handlePoolSelection = async (pool: Pool) => {
     setSelectedPool(pool); // Set pool immediately for UI update
+    updateQueryParams({ pool: pool.address.toLowerCase() });
   };
 
   const clearPoolSelection = () => {
@@ -149,6 +188,7 @@ export default function ChangeSwapFeeV3Module({ addressBook }: { addressBook: Ad
     setGeneratedPayload(null);
     setNewSwapFee("");
     setIsCurrentWalletManager(false);
+    updateQueryParams({ pool: null });
   };
 
   const handleOpenPRModal = () => {
