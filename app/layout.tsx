@@ -33,29 +33,29 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={satoshiFont.className} suppressHydrationWarning>
         <Providers>
           <Flex direction="column" minH="100vh">
-            <Box flex="1">
-              <SidebarContent onClose={() => onClose} display={{ base: "none", md: "block" }} />
-              <Drawer
-                isOpen={isOpen}
-                placement="left"
-                onClose={onClose}
-                returnFocusOnClose={false}
-                onOverlayClick={onClose}
-                size="full"
-              >
-                <DrawerContent>
-                  <SidebarContent onClose={onClose} />
-                </DrawerContent>
-              </Drawer>
+            <SidebarContent onClose={() => onClose} display={{ base: "none", md: "block" }} />
+            <Drawer
+              isOpen={isOpen}
+              placement="left"
+              onClose={onClose}
+              returnFocusOnClose={false}
+              onOverlayClick={onClose}
+              size="full"
+            >
+              <DrawerContent>
+                <SidebarContent onClose={onClose} />
+              </DrawerContent>
+            </Drawer>
+            <Box ml={{ base: 0, md: 72 }} display="flex" flexDirection="column" flex="1" minH="100vh">
               <MobileNav onOpen={onOpen} />
               <DesktopNav />
-              <Box ml={{ base: 0, md: 72 }} p="4">
+              <Box flex="1" p="4">
                 <Flex flexDir="column" width="100%">
                   <main>{children}</main>
                 </Flex>
               </Box>
+              <Footer />
             </Box>
-            <Footer />
             <DisclaimerModal isOpen={showDisclaimer} onClose={handleDisclaimerClose} />
           </Flex>
         </Providers>
