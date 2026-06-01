@@ -51,10 +51,10 @@ const LinkItems = [
         description: "View boosted pools with buffer utilization",
       },
       {
-        name: "ReCLAMM",
+        name: "AutoRange",
         icon: TbChartCovariate,
-        target: "/reclamm",
-        description: "View RECLAMM pools",
+        target: "/autorange",
+        description: "View AutoRange pools",
       },
     ],
   },

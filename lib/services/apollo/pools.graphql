@@ -58,6 +58,8 @@ query GetV3Pools($chainIn: [GqlChain!], $chainNotIn: [GqlChain!], $tagIn: [Strin
       volume24h
       aggregateSwapFee
       aggregateYieldFee
+      isPaused
+      isInRecoveryMode
     }
     poolTokens {
       chain

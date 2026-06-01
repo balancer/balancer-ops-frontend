@@ -71,6 +71,7 @@ import {
   GqlChain,
 } from "@/lib/services/apollo/generated/graphql";
 import { fetchReclammContractData } from "@/lib/services/fetchReclammContractData";
+import { isBlacklistedAutoRangePool } from "@/lib/utils/reclammUtils";
 import { fetchAddressType } from "@/lib/services/fetchAddressType";
 import { useQuery as useReactQuery } from "@tanstack/react-query";
 import {
@@ -113,10 +114,18 @@ export default function ReClammModule({ addressBook }: { addressBook: AddressBoo
     {
       variables: {
         chainIn: [selectedNetwork as any],
-        poolTypeIn: [GqlPoolType.Reclamm], // Filter for ReClaMM pools only
+        poolTypeIn: [GqlPoolType.Reclamm], // Filter for AutoRange (ReCLAMM) pools only
       },
       skip: !selectedNetwork,
     },
+  );
+
+  // Hide pools from old factories: paused+recovery mode pools or any pool on the static blacklist
+  // of pre-relaunch AutoRange pools that are still live on-chain.
+  const activePools = (data?.poolGetPools ?? []).filter(
+    (pool: any) =>
+      !(pool?.dynamicData?.isPaused && pool?.dynamicData?.isInRecoveryMode) &&
+      !isBlacklistedAutoRangePool(pool.chain, pool.address),
   );
 
   // Query for getting selected pool details (including current centeredness margin)
@@ -295,15 +304,15 @@ export default function ReClammModule({ addressBook }: { addressBook: AddressBoo
   // Effect to auto-select pool when data is loaded and poolParam is provided
   useEffect(() => {
     const poolParam = searchParams.get("pool");
-    if (poolParam && data?.poolGetPools && !selectedPool) {
-      const targetPool = data.poolGetPools.find(
+    if (poolParam && activePools.length > 0 && !selectedPool) {
+      const targetPool = activePools.find(
         (pool: any) => pool.address.toLowerCase() === poolParam.toLowerCase(),
       );
       if (targetPool) {
         setSelectedPool(targetPool as unknown as Pool);
       }
     }
-  }, [data?.poolGetPools, selectedPool]);
+  }, [activePools, selectedPool]);
 
   const clearPoolSelection = () => {
     setSelectedPool(null);
@@ -663,9 +672,9 @@ export default function ReClammModule({ addressBook }: { addressBook: AddressBoo
     let description: string;
 
     // Use same filename, branch name, and PR name for all cases
-    filename = `set-reclamm-parameters-${chainId}-${selectedPool.address}-${uniqueId}.json`;
-    branchName = `feature/reclamm-parameters-${shortPoolId}-${uniqueId}`;
-    prName = `Set ReClaMM Parameters for ${poolName} on ${networkName}`;
+    filename = `set-autorange-parameters-${chainId}-${selectedPool.address}-${uniqueId}.json`;
+    branchName = `feature/autorange-parameters-${shortPoolId}-${uniqueId}`;
+    prName = `Set AutoRange Parameters for ${poolName} on ${networkName}`;
 
     // Build description based on what parameters are being changed
     const descriptions = [];
@@ -729,11 +738,11 @@ export default function ReClammModule({ addressBook }: { addressBook: AddressBoo
 
     return {
       type: "reclamm",
-      title: "Configure ReCLAMM pool",
+      title: "Configure AutoRange pool",
       description: payload.meta.description,
       payload: payload,
       params: params,
-      builderPath: "reclamm",
+      builderPath: "autorange",
     };
   };
 
@@ -747,7 +756,7 @@ export default function ReClammModule({ addressBook }: { addressBook: AddressBoo
         gap={4}
       >
         <Heading as="h2" size="lg" variant="special">
-          ReCLAMM Pool: Parameter Management
+          AutoRange Pool: Parameter Management
         </Heading>
         <Box width={{ base: "full", md: "auto" }}>
           <ComposerIndicator />
@@ -768,7 +777,7 @@ export default function ReClammModule({ addressBook }: { addressBook: AddressBoo
         <GridItem colSpan={{ base: 12, md: 8 }}>
           {selectedNetwork && (
             <PoolSelector
-              pools={data?.poolGetPools}
+              pools={activePools}
               loading={loading}
               error={error}
               selectedPool={selectedPool}
@@ -811,7 +820,7 @@ export default function ReClammModule({ addressBook }: { addressBook: AddressBoo
             <Alert status="info" mt={4}>
               <AlertIcon />
               <AlertDescription>
-                This ReCLAMM pool's parameters can be modified through the DAO multisig.
+                This AutoRange pool's parameters can be modified through the DAO multisig.
               </AlertDescription>
             </Alert>
           ) : addressTypeData ? (
@@ -1030,7 +1039,7 @@ export default function ReClammModule({ addressBook }: { addressBook: AddressBoo
         isValid &&
         (hasCenterednessMargin || hasDailyPriceShiftExponent || hasPriceRatioUpdate) && (
           <ParameterChangePreviewCard
-            title="ReCLAMM Parameters Change Preview"
+            title="AutoRange Parameters Change Preview"
             icon={<Settings size={24} />}
             parameters={[
               ...(hasCenterednessMargin

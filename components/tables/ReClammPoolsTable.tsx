@@ -261,7 +261,6 @@ export const ReClammPoolsTable = ({ pools, addressBook, minTvl }: ReClammPoolsTa
     const network = pool.chain.toLowerCase();
     const multisig = getMultisigForNetwork(addressBook, network);
 
-    // Early return for zero address
     if (isZeroAddress(pool.swapFeeManager)) {
       return "DAO";
     }
@@ -300,7 +299,7 @@ export const ReClammPoolsTable = ({ pools, addressBook, minTvl }: ReClammPoolsTa
 
   const getConfigRoute = (pool: Pool) => {
     const network = pool.chain.toLowerCase();
-    return `/payload-builder/reclamm?network=${network}&pool=${pool.address}`;
+    return `/payload-builder/autorange?network=${network}&pool=${pool.address}`;
   };
 
   const handleSort = (field: SortField) => {

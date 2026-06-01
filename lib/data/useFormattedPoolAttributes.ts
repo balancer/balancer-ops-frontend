@@ -1,4 +1,5 @@
 import { Pool } from "@/types/interfaces";
+import { isZeroAddress } from "@ethereumjs/util";
 
 export function useFormattedPoolAttributes(pool: Pool | null) {
   return (() => {
@@ -15,7 +16,13 @@ export function useFormattedPoolAttributes(pool: Pool | null) {
         title: "Create Time",
         value: new Date(parseInt(pool.createTime) * 1000).toLocaleString(),
       },
-      { title: "Owner", value: pool.swapFeeManager },
+      {
+        title: "Owner",
+        value:
+          pool.swapFeeManager && isZeroAddress(pool.swapFeeManager)
+            ? "DAO"
+            : pool.swapFeeManager,
+      },
       {
         title: "Swap Fee",
         value: `${parseFloat(pool.dynamicData.swapFee) * 100}%`,

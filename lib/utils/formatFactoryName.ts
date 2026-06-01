@@ -3,15 +3,15 @@
  * Examples:
  * - "WeightedPoolFactory" -> "Weighted Pool Factory"
  * - "Gyro2CLPPoolFactory" -> "Gyro 2 CLP Pool Factory"
- * - "ReClammPoolFactory" -> "ReCLAMM Pool Factory"
+ * - "ReClammPoolFactory" -> "AutoRange Pool Factory"
  */
 export function formatFactoryName(factoryName: string): string {
   // Remove "Factory" suffix if present
   let displayName = factoryName.replace(/Factory$/, "");
 
-  // Special case for ReCLAMM - keep it as ReCLAMM
+  // Render ReClamm factories with the user-facing AutoRange name
   if (displayName.includes("ReClamm")) {
-    displayName = displayName.replace("ReClamm", "ReCLAMM");
+    displayName = displayName.replace("ReClamm", "AutoRange");
   }
 
   // Generic handling: add spaces before capital letters and handle "Pool" suffix
