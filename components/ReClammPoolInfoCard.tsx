@@ -86,7 +86,7 @@ export const ReClammPoolInfoCard: React.FC<ReClammPoolInfoCardProps> = ({ pool, 
       <VStack alignItems="flex-start" spacing={{ base: "sm", md: "md" }} width="full" p={4}>
         <Flex width="full" justifyContent="space-between" alignItems="center">
           <Heading variant="h4" fontSize="1.25rem">
-            ReCLAMM Parameters
+            AutoRange Parameters
           </Heading>
           {contractData && (
             <Badge

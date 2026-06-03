@@ -51,10 +51,10 @@ const LinkItems = [
         description: "View boosted pools with buffer utilization",
       },
       {
-        name: "ReCLAMM",
+        name: "AutoRange",
         icon: TbChartCovariate,
-        target: "/reclamm",
-        description: "View RECLAMM pools",
+        target: "/autorange",
+        description: "View AutoRange pools",
       },
     ],
   },
@@ -151,7 +151,7 @@ const DefilyticaBanner = () => (
         objectFit="contain"
       />
       <Text fontSize="sm" fontWeight="medium" variant="special">
-        developed by defilytica
+        developed by DeFilytica
       </Text>
     </Box>
   </Link>
@@ -227,14 +227,13 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
         </Box>
 
         <Flex
-          direction="column"
           alignItems="center"
+          justifyContent="center"
           px="4"
-          py="4"
-          pb="32"
-          gap="2"
-          display={{ base: "none", sm: "flex" }}
+          h={{ base: 20, md: 20 }}
           flexShrink={0}
+          borderTop="1px solid"
+          borderColor="background.level2"
         >
           <DefilyticaBanner />
         </Flex>

@@ -5,7 +5,7 @@ export const fetchReclammContractData = async (
   network: string,
 ): Promise<ReClammContractData> => {
   try {
-    const response = await fetch(`/api/reclamm?poolAddress=${poolAddress}&network=${network}`);
+    const response = await fetch(`/api/autorange?poolAddress=${poolAddress}&network=${network}`);
 
     if (!response.ok) {
       throw new Error("Failed to fetch reclamm compute data");

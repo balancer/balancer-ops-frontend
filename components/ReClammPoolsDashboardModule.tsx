@@ -25,6 +25,7 @@ import {
 import { Pool, AddressBook } from "@/types/interfaces";
 import { getNetworksWithCategory } from "@/lib/data/balancer/addressBook";
 import { ReClammPoolsTable } from "@/components/tables/ReClammPoolsTable";
+import { isBlacklistedAutoRangePool } from "@/lib/utils/reclammUtils";
 
 interface ReClammPoolsDashboardModuleProps {
   addressBook: AddressBook;
@@ -98,9 +99,9 @@ export default function ReClammPoolsDashboardModule({
       >
         <Box>
           <Heading as="h2" size="lg" variant="special" mb={2}>
-            ReCLAMM Pools
+            AutoRange Pools
           </Heading>
-          <Text>View all ReCLAMM pools in Balancer v3</Text>
+          <Text>View all AutoRange pools in Balancer v3</Text>
         </Box>
 
         <Box>
@@ -123,7 +124,7 @@ export default function ReClammPoolsDashboardModule({
             <Spinner size="lg" color="gray.400" />
           </Box>
           <Text fontSize="m" color="gray.500">
-            Loading ReCLAMM pools...
+            Loading AutoRange pools...
           </Text>
         </Center>
       ) : error ? (
@@ -132,18 +133,30 @@ export default function ReClammPoolsDashboardModule({
           <AlertTitle>Error loading pools</AlertTitle>
           <AlertDescription>{error.message}</AlertDescription>
         </Alert>
-      ) : !data?.poolGetPools || data.poolGetPools.length === 0 ? (
-        <Alert status="info" mt={4}>
-          <AlertIcon />
-          <AlertTitle>No ReCLAMM pools found</AlertTitle>
-          <AlertDescription>Try selecting a different network</AlertDescription>
-        </Alert>
       ) : (
-        <ReClammPoolsTable
-          pools={data.poolGetPools as unknown as Pool[]}
-          addressBook={addressBook}
-          minTvl={minTvl}
-        />
+        (() => {
+          const activePools = (data?.poolGetPools ?? []).filter(
+            (pool: any) =>
+              !(pool?.dynamicData?.isPaused && pool?.dynamicData?.isInRecoveryMode) &&
+              !isBlacklistedAutoRangePool(pool.chain, pool.address),
+          );
+          if (activePools.length === 0) {
+            return (
+              <Alert status="info" mt={4}>
+                <AlertIcon />
+                <AlertTitle>No AutoRange pools found</AlertTitle>
+                <AlertDescription>Try selecting a different network</AlertDescription>
+              </Alert>
+            );
+          }
+          return (
+            <ReClammPoolsTable
+              pools={activePools as unknown as Pool[]}
+              addressBook={addressBook}
+              minTvl={minTvl}
+            />
+          );
+        })()
       )}
     </Container>
   );

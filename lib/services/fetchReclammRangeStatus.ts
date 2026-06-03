@@ -4,7 +4,7 @@ export const fetchReclammRangeStatus = async (
 ): Promise<boolean> => {
   try {
     const response = await fetch(
-      `/api/reclamm/range?poolAddress=${poolAddress}&network=${network}`,
+      `/api/autorange/range?poolAddress=${poolAddress}&network=${network}`,
     );
 
     if (!response.ok) {

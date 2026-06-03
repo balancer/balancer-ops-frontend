@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
       contract.computeCurrentVirtualBalances(),
       contract.getCurrentLiveBalances(),
       contract.getCenterednessMargin(),
-      contract.isPoolWithinTargetRangeUsingCurrentVirtualBalances(),
+      contract.isPoolWithinTargetRange(),
       contract.getDailyPriceShiftExponent(),
       contract.computeCurrentPriceRatio(),
     ]);
@@ -48,14 +48,14 @@ export async function GET(request: NextRequest) {
           liveBalanceB: liveBalances[1].toString(),
         },
         centerednessMargin: centerednessMargin.toString(),
-        isPoolWithinTargetRange: isPoolWithinTargetRange[0],
+        isPoolWithinTargetRange: isPoolWithinTargetRange,
         dailyPriceShiftExponent: dailyPriceShiftExponent.toString(),
         currentPriceRatio: currentPriceRatio.toString(),
       },
       { headers: { "Cache-Control": "s-maxage=300, stale-while-revalidate" } },
     );
   } catch (error) {
-    console.error("Error fetching compute reclamm data:", error);
-    return NextResponse.json({ error: "Failed to fetch compute reclamm data" }, { status: 500 });
+    console.error("Error fetching AutoRange compute data:", error);
+    return NextResponse.json({ error: "Failed to fetch AutoRange compute data" }, { status: 500 });
   }
 }
