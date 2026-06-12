@@ -102,7 +102,7 @@ const SearchableAddressInput: React.FC<SearchableAddressInputProps> = ({
         >
           {filteredAddresses.map(([name, address]) => (
             <ListItem
-              key={address}
+              key={`${name}-${address}`}
               onClick={() => handleSelectAddress(address)}
               _hover={{ bg: hoverColor }}
               cursor="pointer"
