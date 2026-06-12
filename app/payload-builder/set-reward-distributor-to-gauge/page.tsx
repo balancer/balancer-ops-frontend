@@ -236,7 +236,7 @@ export default function SetRewardDistributorPage() {
     // Just provide the filename portion - let the modal combine it with the path from config
     const chainIds = Array.from(new Set(rewardAdds.map(r => r.chainId)));
     const chainSlug = chainIds.length === 1 ? chainIds[0] : "multi";
-    const filename = `set-distributors-${chainSlug}-${shortGaugeId}-${uniqueId}.json`;
+    const filename = `set-distributors-${chainSlug}-${firstReward.targetGauge}-${uniqueId}.json`;
 
     return {
       prefillBranchName: `feature/set-distributor-${shortGaugeId}-${uniqueId}`,

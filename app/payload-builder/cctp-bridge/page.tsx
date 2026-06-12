@@ -89,8 +89,11 @@ export default function CCTPBridge() {
         ? destinationsArray[0]
         : destinationsArray.slice(0, -1).join(", ") + " and " + destinationsArray.slice(-1);
 
-    // Create just the filename without path prefix
-    const filename = `cctp-bridge-${uniqueId}.json`;
+    // Create just the filename without path prefix.
+    // Follows the OmniAutoOps convention: {prefix}-{chainId}-{uniqueId}.json.
+    // CCTP bridges always start from Ethereum in this implementation (chainId 1).
+    const chainId = "1";
+    const filename = `cctp-bridge-${chainId}-${uniqueId}.json`;
 
     return {
       prefillBranchName: `feature/cctp-bridge-${uniqueId}`,

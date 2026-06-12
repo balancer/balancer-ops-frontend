@@ -230,7 +230,7 @@ export default function MevCaptureHookConfigurationModule({
     const chainId = networkOption?.chainId || selectedNetwork;
 
     // Create the filename with chain ID included
-    const filename = `mev-capture-params-${chainId}-${shortPoolId}-${uniqueId}.json`;
+    const filename = `mev-capture-params-${chainId}-${selectedPool.address}-${uniqueId}.json`;
 
     return {
       prefillBranchName: `feature/mev-capture-params-${shortPoolId}-${uniqueId}`,
