@@ -544,7 +544,19 @@ const PermissionsPayloadBuilder: React.FC<PermissionsPayloadBuilderProps> = ({ a
       "Authorizer",
     );
 
-    const daoWallet = getAddress(addressBook, selectedNetwork, "multisigs", "dao");
+    // On Ethereum mainnet the DAO multisig holds the authorizer admin role and
+    // acts as the granter. On every other chain it's the Omni multisig instead.
+    // The curated `omniSig` in NETWORK_OPTIONS is the authoritative source for the
+    // Omni signer (it carries per-chain overrides, e.g. zkEVM/HyperEVM/Plasma, that
+    // the upstream address book does not reflect). Fall back to the address book if
+    // a network option is missing.
+    const isMainnet = selectedNetwork === "mainnet";
+    const networkOption = NETWORK_OPTIONS.find(n => n.apiID === selectedNetwork.toUpperCase());
+    const daoWallet = isMainnet
+      ? getAddress(addressBook, selectedNetwork, "multisigs", "dao")
+      : networkOption?.omniSig ||
+        getAddress(addressBook, selectedNetwork, "multisigs", "omni") ||
+        getAddress(addressBook, selectedNetwork, "multisigs", "dao");
 
     setAuthorizerAdaptor(authorizer || "");
     setDAOAddress(daoWallet || "");
@@ -776,9 +788,10 @@ const PermissionsPayloadBuilder: React.FC<PermissionsPayloadBuilderProps> = ({ a
     const grantCount = permissionsState.selectedPermissions.length;
     const revokeCount = permissionsToRevoke.length;
 
-    // Get network name
+    // Get network name and chain id
     const networkOption = NETWORK_OPTIONS.find(n => n.apiID === selectedNetwork.toUpperCase());
     const networkName = networkOption?.label || selectedNetwork;
+    const chainId = networkOption?.chainId || "1";
 
     // Create descriptive action text
     let actionText = "";
@@ -801,11 +814,14 @@ const PermissionsPayloadBuilder: React.FC<PermissionsPayloadBuilderProps> = ({ a
       descriptionText += `Revoking ${revokeCount} permissions.\n`;
     }
 
-    // Create just the filename - path will come from the config
-    const filename = `permissions-${shortWalletAddress}-${uniqueId}.json`;
+    // Create just the filename - path will come from the config.
+    // Follows the OmniAutoOps convention: {prefix}-{chainId}-{address}-{uniqueId}.json.
+    // The full wallet address is used so files are unambiguous and reproducible
+    // against on-chain state for audit purposes.
+    const filename = `permissions-${chainId}-${selectedWallet}-${uniqueId}.json`;
 
     return {
-      prefillBranchName: `feature/permissions-${shortWalletAddress}-${uniqueId}`,
+      prefillBranchName: `feature/permissions-${chainId}-${shortWalletAddress}-${uniqueId}`,
       prefillPrName: `${actionText} for ${readableWalletName} on ${networkName}`,
       prefillDescription: descriptionText,
       prefillFilename: filename,
@@ -1262,6 +1278,7 @@ const PermissionsPayloadBuilder: React.FC<PermissionsPayloadBuilderProps> = ({ a
               isOpen={isOpen}
               onClose={onClose}
               payload={generatedPayload}
+              network={selectedNetwork}
               {...getPrefillValues()}
             />
           </Box>

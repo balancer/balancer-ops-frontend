@@ -407,7 +407,7 @@ function RewardsInjectorConfiguratorV2({
     const summaryInfo = `updating ${operationCount} configuration${operationCount !== 1 ? "s" : ""}`;
 
     const chainId = getChainId(networkName);
-    const filename = `injector-update-${chainId}-${shortInjectorId}-${uniqueId}.json`;
+    const filename = `injector-update-${chainId}-${selectedAddress.address}-${uniqueId}.json`;
 
     return {
       prefillBranchName: `feature/injector-update-${shortInjectorId}-${uniqueId}`,

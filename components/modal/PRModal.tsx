@@ -103,7 +103,12 @@ export const PRCreationModal: React.FC<PRCreationModalProps> = ({
   const toast = useToast();
 
   const { branchNamePlaceholder, prNamePlaceholder, prTypePath } = payloadOption || {};
-  const needsWeekSelector = prTypePath?.includes("YYYY-WXX");
+
+  // Permission payloads live under BIPs for Ethereum mainnet, but under OmniAutoOps for every other chain.
+  const isMainnet = !network || network.toLowerCase() === "mainnet";
+  const effectivePrTypePath = type === "permissions" && !isMainnet ? "OmniAutoOps/" : prTypePath;
+
+  const needsWeekSelector = effectivePrTypePath?.includes("YYYY-WXX");
 
   // Initialize values when the modal opens or prefill values change
   useEffect(() => {
@@ -125,8 +130,8 @@ export const PRCreationModal: React.FC<PRCreationModalProps> = ({
 
   // Calculate file path based on week and type if not pre-filled
   useEffect(() => {
-    if (prTypePath) {
-      const basePath = prTypePath;
+    if (effectivePrTypePath) {
+      const basePath = effectivePrTypePath;
       const year = getYear(selectedWeek);
       const weekNum = getISOWeek(selectedWeek);
       const weekStr = `W${weekNum}`;
@@ -139,7 +144,7 @@ export const PRCreationModal: React.FC<PRCreationModalProps> = ({
       // Set the calculated path from config
       setFilePath(newPath);
     }
-  }, [type, selectedWeek, network, prTypePath]);
+  }, [type, selectedWeek, network, effectivePrTypePath]);
 
   // Set total filepath update on Modal state change
   useEffect(() => {
