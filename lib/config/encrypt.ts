@@ -15,7 +15,6 @@ function encrypt(text: string): string {
 
 function decrypt(text: string): string | null {
   try {
-    console.log("Attempting to decrypt:", text);
     const textParts = text.split(":");
     if (textParts.length !== 2) {
       console.error("Invalid encrypted text format");
@@ -27,11 +26,10 @@ function decrypt(text: string): string | null {
     const decipher = crypto.createDecipheriv(ALGORITHM, key, iv);
     let decrypted = decipher.update(encryptedText);
     decrypted = Buffer.concat([decrypted, decipher.final()]);
-    const result = decrypted.toString();
-    console.log("Decryption successful. Token length:", result.length);
-    return result;
+    return decrypted.toString();
   } catch (error) {
-    console.error("Decryption error:", error);
+    // Do not log the ciphertext or plaintext — only the failure itself.
+    console.error("Decryption error:", error instanceof Error ? error.message : error);
     return null;
   }
 }

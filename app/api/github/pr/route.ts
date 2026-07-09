@@ -66,7 +66,6 @@ export async function POST(req: NextRequest) {
 
     const githubTokenEncrypted = user.accounts[0].access_token;
     const githubToken = decrypt(githubTokenEncrypted);
-    console.log(githubToken);
 
     const octokit = new Octokit({ auth: githubToken });
 
