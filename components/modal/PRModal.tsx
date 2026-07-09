@@ -41,6 +41,7 @@ import {
   isSameWeek,
 } from "date-fns";
 import { generateUniqueId } from "@/lib/utils/generateUniqueID";
+import { signIn } from "next-auth/react";
 
 interface PRCreationModalProps {
   isOpen: boolean;
@@ -90,6 +91,7 @@ export const PRCreationModal: React.FC<PRCreationModalProps> = ({
   const repoOptions = payloadOption ? payloadOption.repos : [];
 
   const [forkStatus, setForkStatus] = useState<ForkStatus | null>(null);
+  const [authError, setAuthError] = useState<string | null>(null);
   const [prRepo, setPrRepo] = useState(repoOptions[0] || "");
   const [prBranch, setPrBranch] = useState("");
   const [prName, setPrName] = useState("");
@@ -176,40 +178,54 @@ export const PRCreationModal: React.FC<PRCreationModalProps> = ({
     return filePath || "";
   };
 
-  useEffect(() => {
+  // Fetch fork status. Distinguishes an expired/revoked GitHub token (401) so the UI
+  // can offer a reconnect action instead of a dead-end error toast.
+  const fetchForkStatus = async ({ showSuccessToast = false } = {}) => {
+    if (!prRepo) return;
+
     setIsLoading(true);
-    const checkForkStatus = async () => {
-      if (!isOpen || !prRepo) return;
+    setAuthError(null);
+    try {
+      const response = await fetch(`/api/github/check-status?repo=${prRepo}`);
+      const data = await response.json().catch(() => ({}));
 
-      try {
-        const response = await fetch(`/api/github/check-status?repo=${prRepo}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+      if (!response.ok) {
+        if (response.status === 401) {
+          setAuthError(
+            data?.message || "Your GitHub session has expired. Please reconnect to continue.",
+          );
+          return;
         }
+        throw new Error(data?.error || data?.message || `HTTP error! status: ${response.status}`);
+      }
 
-        const status = await response.json();
-        setForkStatus(status);
-      } catch (error) {
-        console.error("Error checking fork status:", error);
+      setForkStatus(data);
+
+      if (showSuccessToast) {
         toast({
-          title: "Error checking fork status",
-          description: error instanceof Error ? error.message : "An unknown error occurred",
-          status: "error",
-          duration: 5000,
+          title: "Fork status refreshed",
+          status: "success",
+          duration: 2000,
           isClosable: true,
         });
-      } finally {
-        setIsLoading(false);
       }
-    };
+    } catch (error) {
+      console.error("Error checking fork status:", error);
+      toast({
+        title: "Error checking fork status",
+        description: error instanceof Error ? error.message : "An unknown error occurred",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-    checkForkStatus();
+  useEffect(() => {
+    if (!isOpen || !prRepo) return;
+    fetchForkStatus();
   }, [isOpen, prRepo]);
 
   const handleWeekChange = (direction: "prev" | "next") => {
@@ -296,43 +312,12 @@ export const PRCreationModal: React.FC<PRCreationModalProps> = ({
     window.open(url, "_blank");
   };
 
-  const handleRefreshForkStatus = async () => {
-    if (!prRepo) return;
+  const handleRefreshForkStatus = () => fetchForkStatus({ showSuccessToast: true });
 
-    setIsLoading(true);
-    try {
-      const response = await fetch(`/api/github/check-status?repo=${prRepo}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const status = await response.json();
-      setForkStatus(status);
-
-      toast({
-        title: "Fork status refreshed",
-        status: "success",
-        duration: 2000,
-        isClosable: true,
-      });
-    } catch (error) {
-      console.error("Error checking fork status:", error);
-      toast({
-        title: "Error checking fork status",
-        description: error instanceof Error ? error.message : "An unknown error occurred",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
-    } finally {
-      setIsLoading(false);
-    }
+  // Re-run the GitHub OAuth flow. On success the token is re-persisted server-side
+  // (see auth.ts signIn event), which heals a stale/revoked token.
+  const handleReconnectGitHub = () => {
+    signIn("github");
   };
 
   const handleFilePathChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -346,6 +331,31 @@ export const PRCreationModal: React.FC<PRCreationModalProps> = ({
       <ModalContent>
         <ModalHeader>Create Pull Request</ModalHeader>
         <ModalCloseButton />
+        {authError && (
+          <Alert status="error" mb={4}>
+            <AlertIcon />
+            <Box flex="1">
+              <AlertTitle>GitHub connection expired</AlertTitle>
+              <AlertDescription display="block">
+                {authError} Reconnecting refreshes your access token and resolves this.
+              </AlertDescription>
+              <Flex mt={2} gap={2}>
+                <Button size="sm" colorScheme="red" onClick={handleReconnectGitHub}>
+                  Reconnect GitHub
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  leftIcon={<RepeatIcon />}
+                  onClick={handleRefreshForkStatus}
+                  isLoading={isLoading}
+                >
+                  Retry
+                </Button>
+              </Flex>
+            </Box>
+          </Alert>
+        )}
         {forkStatus?.isOutdated && (
           <Alert status="warning" mb={4}>
             <AlertIcon />
