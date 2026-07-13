@@ -10,7 +10,7 @@ DAO operations and governance tool for the Balancer protocol. Part of the [Balan
 - **Rewards Injector Management** — Monitor and configure V1/V2 injector programs across networks
 - **Gauge Creator** — Create and enable veBAL gauges
 - **Liquidity Buffers** — Initialize and manage liquidity buffers
-- **Protocol Monitoring** — Dashboards for boosted pools, Chainlink automation status, and reward tokens
+- **Protocol Monitoring** — Dashboards for boosted pools, injectors, and reward tokens
 
 Supports 15+ networks including Mainnet, Arbitrum, Base, Polygon, Optimism, Gnosis, Avalanche, and more.
 
