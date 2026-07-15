@@ -90,7 +90,6 @@ Gauge lifecycle management:
 - **Gauge Kill List** (`app/gauge-kill-list/`) — Manage gauge deprecation and removal
 
 #### 6. Additional tools
-- **Chainlink Automation** (`app/chainlink-automation/`) — Configure and monitor Chainlink automation for protocol operations
 - **veBAL Vesting (sdBAL)** (`app/sdbal-vesting/`) — Manage sdBAL vesting schedules
 
 ### Authentication
@@ -111,7 +110,6 @@ app/                    # Next.js App Router pages and API routes
   liquidity-buffers/    # Liquidity buffer tracking
   gauge-creator/        # Gauge creation
   gauge-kill-list/      # Gauge deprecation management
-  chainlink-automation/ # Chainlink automation config
   sdbal-vesting/        # veBAL/sdBAL vesting management
   reclamm/              # ReCLAMM position management
 components/             # React components (feature + shared)

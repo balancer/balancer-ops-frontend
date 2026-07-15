@@ -10,7 +10,6 @@ import {
   Image,
   Link as ChakraLink,
 } from "@chakra-ui/react";
-import { SiChainlink } from "react-icons/si";
 import { RiAlertLine, RiContractLine } from "react-icons/ri";
 import {
   TbTransactionBitcoin,
@@ -19,7 +18,6 @@ import {
   TbCoins,
   TbChartCovariate,
 } from "react-icons/tb";
-import { GiRadarSweep } from "react-icons/gi";
 import { FaChartPie } from "react-icons/fa";
 import { MdOutlineSsidChart } from "react-icons/md";
 import { BiAlignMiddle } from "react-icons/bi";
@@ -105,18 +103,6 @@ const LinkItems = [
     icon: BiAlignMiddle,
     target: "/liquidity-buffers",
     description: "View liquidity buffer allocations",
-  },
-  {
-    name: "Monitoring",
-    icon: GiRadarSweep,
-    children: [
-      {
-        name: "Chainlink Automation",
-        icon: SiChainlink,
-        target: "/chainlink-automation",
-        description: "View Chainlink Automation Upkeeps",
-      },
-    ],
   },
   {
     name: "Emergency",

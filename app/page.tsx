@@ -2,7 +2,7 @@
 import { Box, Heading, Text, Button, VStack, Container, Link, Flex } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { TbTransactionBitcoin, TbGaugeFilled, TbActivity } from "react-icons/tb";
+import { TbTransactionBitcoin, TbGaugeFilled } from "react-icons/tb";
 import { RiAlertLine, RiContractLine } from "react-icons/ri";
 import { FaRegChartBar } from "react-icons/fa6";
 
@@ -86,21 +86,9 @@ export default function Page() {
     {
       title: "Monitoring",
       description: (
-        <>
-          Check the status of critical infrastructure such as Chainlink upkeeps, injector programs
-          or liquidity buffers.
-        </>
+        <>Check the status of critical infrastructure such as injector programs or liquidity buffers.</>
       ),
       features: [
-        {
-          title: "Chainlink Automation",
-          icon: TbActivity,
-          description: "Monitor funding status of upkeeps managed by Balancer",
-          primaryAction: {
-            label: "View Upkeeps",
-            href: "/chainlink-automation",
-          },
-        },
         {
           title: "Injector Program Status",
           icon: RiAlertLine,
