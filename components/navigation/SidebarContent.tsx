@@ -1,13 +1,10 @@
 import { useState } from "react";
 import {
   Box,
-  Text,
   CloseButton,
   Flex,
   Heading,
   BoxProps,
-  Link,
-  Image,
   Link as ChakraLink,
 } from "@chakra-ui/react";
 import { RiAlertLine, RiContractLine } from "react-icons/ri";
@@ -112,37 +109,6 @@ const LinkItems = [
   },
 ];
 
-const DefilyticaBanner = () => (
-  <Link href="https://defilytica.com" isExternal>
-    <Box
-      shadow="md"
-      borderRadius="md"
-      overflow="hidden"
-      transition="all 0.1s"
-      p={2}
-      display="flex"
-      alignItems="center"
-      gap={2}
-      bg="purple.950"
-      _hover={{
-        shadow: "lg",
-        transform: "translateY(-2px)",
-      }}
-    >
-      <Image
-        src="/imgs/defilytica.png"
-        alt="DeFilytica"
-        width="24px"
-        height="24px"
-        objectFit="contain"
-      />
-      <Text fontSize="sm" fontWeight="medium" variant="special">
-        developed by DeFilytica
-      </Text>
-    </Box>
-  </Link>
-);
-
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
   const [openItems, setOpenItems] = useState<{ [key: string]: boolean }>({});
 
@@ -211,18 +177,6 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
         <Box flex="1" overflowY="auto" px="4" minH="0">
           {LinkItems.map(item => renderNavItem(item))}
         </Box>
-
-        <Flex
-          alignItems="center"
-          justifyContent="center"
-          px="4"
-          h={{ base: 20, md: 20 }}
-          flexShrink={0}
-          borderTop="1px solid"
-          borderColor="background.level2"
-        >
-          <DefilyticaBanner />
-        </Flex>
       </Flex>
     </Box>
   );

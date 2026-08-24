@@ -27,9 +27,6 @@ export default function Footer() {
             This is a self-custody application. You are solely responsible for all transactions. No
             liability is assumed by developers for any losses or errors. Use at your own risk.
           </Text>
-          <Text fontSize="xs" color="font.secondary" whiteSpace="nowrap">
-            Built by DeFilytica for the Balancer DAO
-          </Text>
         </Stack>
       </Container>
     </Box>
