@@ -12,7 +12,7 @@
     "prettier:fix": "yarn run prettier '**/*.*(md|json|yaml|ts|js|tsx)' --write --cache --log-level=warn",
     "gen:graphql:dev": "DOTENV_CONFIG_PATH=./.env.local graphql-codegen -r dotenv/config",
     "gen:graphql:prod": "DOTENV_CONFIG_PATH=./.env graphql-codegen -r dotenv/config",
-    "postinstall": "rm -rf node_modules/@graphql-tools/*/node_modules/@graphql-tools/utils && prisma generate && husky install",
+    "postinstall": "prisma generate && husky install",
     "prepare": "husky install"
   },
   "dependencies": {
